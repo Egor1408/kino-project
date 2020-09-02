@@ -1,0 +1,16 @@
+.tabs {
+  width: 100%;
+}
+.ant-tabs-nav-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.ant-input-affix-wrapper {
+  width: 938px;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: 32px;
+}

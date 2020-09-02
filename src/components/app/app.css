@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+body {
+  background: #f7f7f7;
+}
+.container {
+  max-width: 1010px;
+  margin: 0 auto;
+  padding: 13px 36px 17px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container .ant-spin {
+  margin-top: 50px;
+}
