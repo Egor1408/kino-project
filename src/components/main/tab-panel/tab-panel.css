@@ -1,0 +1,22 @@
+.tabs {
+  width: 100%;
+}
+
+.ant-tabs-nav-wrap {
+  display: flex;
+  justify-content: center;
+}
+span.ant-input-search {
+  margin-bottom: 20px;
+}
+.ant-input-affix-wrapper {
+  width: 938px;
+  margin: 0 auto;
+}
+
+.tab-panel .ant-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}

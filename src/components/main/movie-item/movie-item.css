@@ -7,6 +7,8 @@
 }
 .description {
   padding: 12px 20px 0 20px;
+  height: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -18,12 +20,30 @@
   justify-content: center;
   align-items: center;
 }
+
 .poster img {
   height: 100%;
   top: -2px;
 }
 
+.poster .noImage {
+  height: 263px;
+  width: 183px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #1890ff;
+  text-align: center;
+}
+
+.noImage .anticon {
+  margin-top: 15px;
+  font-size: 40px;
+}
 .title .ant-typography {
+  max-width: 200px;
   font-style: normal;
   font-weight: normal;
   line-height: 28px;
@@ -75,11 +95,30 @@
   color: #000;
 }
 .rate {
-  width: 100%;
+  position: absolute;
+  bottom: 0;
   height: 46px;
   display: flex;
   align-items: center;
 }
 .rate .ant-rate {
   width: 100%;
+  /* color: black; */
+}
+
+.vote-average {
+  font-size: 12px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #000;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 3px solid;
+  border-radius: 50%;
 }

@@ -1,34 +1,88 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ApiService from '../../services/api-service';
-
-import Header from '../header';
-import Footer from '../footer';
-import MovieList from '../movie-list';
-import Spinner from '../spinner';
+import Main from '../main';
+import { debounce } from '../../../node_modules/lodash';
 import 'antd/dist/antd.css';
 import './app.css';
 
 export default class App extends Component {
+  static propTypes = {
+    genres: PropTypes.array,
+    searchMovies: PropTypes.array,
+    ratedMovies: PropTypes.array,
+
+    currentPage: PropTypes.string,
+    currentTab: PropTypes.string,
+    searchTerm: PropTypes.string,
+
+    totalSearchResults: PropTypes.number,
+    totalRatedResults: PropTypes.number,
+
+    loadGenres: PropTypes.bool,
+    loadMovieList: PropTypes.bool,
+    loadRatedList: PropTypes.bool,
+    ratedListIsEmpty: PropTypes.bool,
+    error: PropTypes.bool,
+  }
+
   state = {
+    guestSessionId: null,
     genres: [],
-    movies: [],
-    searchTerm: 'return',
-    totalResults: 0,
+    searchMovies: [],
+    ratedMovies: [],
+    searchTerm: '',
+    currentPage: '1',
+    currentTab: '1',
+    totalSearchResults: 0,
+    totalRatedResults: 0,
+    ratedListIsEmpty: true,
     loadGenres: false,
     loadMovieList: false,
+    loadRatedList: false,
+    error: false,
   };
-
-  componentDidMount() {
-    this.getLists(this.state.searchTerm, this.state.currentPage);
-    this.getGenres();
-  }
 
   apiService = new ApiService();
 
-  // componentDidMount
-  getGenres() {
+  componentDidMount() {
+    this.genres();
+    this.guestSession();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.currentPage !== prevState.currentPage || this.state.searchTerm !== prevState.searchTerm) {
+      this.searchList(this.state.searchTerm, this.state.currentPage);
+    }
+  }
+
+  changeTab = (tab) => {
+    this.setState({
+      currentTab: tab,
+    });
+  }
+
+  onError = (err) => {
+    this.setState({
+      error: true,
+      loadMovieList: false,
+    });
+  }
+
+  guestSession = () => {
     this.apiService
-      .getGenre()
+      .getGuestId()
+      .then((session) => {
+        this.setState({
+          guestSessionId: session.guest_session_id,
+        });
+      })
+      .catch(this.onError);
+  }
+
+  genres = () => {
+    this.apiService
+      .getGenresList()
       .then((list) => {
         this.setState({
           genres: [...list.genres],
@@ -38,65 +92,84 @@ export default class App extends Component {
       .catch(this.onError);
   }
 
-  // componentDidMount
-  getLists(searchTerm, pageNumber) {
+  searchList = (searchTerm, pageNumber) => {
     this.apiService
-      .getList(`${searchTerm}&page=${pageNumber}`)
+      .getSearchList(searchTerm, pageNumber)
       .then((list) => {
         this.setState({
-          movies: [...list.results],
-          totalResults: list.total_results,
+          searchMovies: [...list.results],
+          totalSearchResults: list.total_results,
           loadMovieList: true,
         });
       })
       .catch(this.onError);
   }
 
-  onError = (err) => {
-
+  ratedList = (guestId) => {
+    this.apiService
+      .getRatedList(guestId)
+      .then((list) => {
+        // console.log(list);
+        if (list.total_results !== 0) {
+          this.setState({
+            ratedMovies: [...list.results],
+            totalRatedResults: list.total_results,
+            loadRatedList: true,
+          });
+        }
+      })
+      // .then(console.log(this.state.ratedMovies))
+      .catch(this.onError);
   };
 
-  // ComponentDidUpdate()
-  nextPage = async (newPage) => {
-    await this.setState({
-      currentPage: newPage,
-    });
-    await this.getLists(this.state.currentPage);
+  rateMovie = (movieId, guestId, requestBody) => {
+    this.apiService
+      .requestRateMovie(movieId, guestId, requestBody)
+      .then((list) => {
+        // console.log(`ratedFilm ${list.success}`);
+      })
+      .catch(this.onError);
   }
 
-  // ComponentDidUpdate()
-  changeSearch = async (e) => {
-    await this.setState({
-      searchTerm: e.target.value,
+  changeSearch = debounce((e) => {
+    this.setState({
+      searchTerm: e,
       currentPage: 1,
     });
-    await this.getLists(this.state.searchTerm, this.state.currentPage);
+  }, 1500);
+
+  nextPage = (newPage) => {
+    this.setState({
+      currentPage: newPage,
+    });
   }
 
   render() {
     const {
-      movies, genres, loadGenres, loadMovieList,
+      guestSessionId, searchMovies, ratedMovies, searchTerm, genres, currentTab,
+      loadGenres, loadMovieList, loadRatedList, totalSearchResults, totalRatedResults, error,
     } = this.state;
-    let movieList = null;
-    let footer = null;
-
-    if (loadGenres && loadMovieList) {
-      movieList = <MovieList movies = { movies } genres = { genres } />;
-    } else movieList = <Spinner />;
-
-    if (loadGenres && loadMovieList && this.state.totalResults > 20) {
-      footer = <Footer
-                  nextPage = {this.nextPage}
-                  currentPage={this.state.currentPage}
-                  total = {this.state.totalResults}
-                />;
-    }
-
     return (
       <div className="container">
-        <Header changeSearch = {this.changeSearch}/>
-        { movieList }
-        { footer }
+        <Main
+          changeSearch = {this.changeSearch}
+          rateMovie = {this.rateMovie}
+          ratedList = {this.ratedList}
+          nextPage = {this.nextPage}
+          changeTab = {this.changeTab}
+          guestSessionId={guestSessionId}
+          searchTerm={searchTerm}
+          error={error}
+          searchMovies={searchMovies}
+          ratedMovies={ratedMovies}
+          genres={genres}
+          loadGenres={loadGenres}
+          loadMovieList={loadMovieList}
+          loadRatedList={loadRatedList}
+          totalRatedResults={totalRatedResults}
+          totalSearchResults = {totalSearchResults}
+          currentTab={currentTab}
+        />
       </div>
     );
   }
