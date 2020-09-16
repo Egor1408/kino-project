@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, Empty } from 'antd';
 import MovieItem from '../movie-item';
+import { GenresConsumer } from '../../context';
 import Spinner from '../../spinner';
 import ErrorIndicator from '../../error-indicator';
 import './search-movie-list.css';
@@ -8,7 +9,9 @@ import 'antd/dist/antd.css';
 
 const SearchMovieList = (props) => {
   const {
-    searchMovies, genres, loadMovieList, loadGenres, rateMovie, guestSessionId, error, searchTerm,
+    searchMovies,
+    genres,
+    loadMovieList, loadGenres, rateMovie, guestSessionId, error, searchTerm,
   } = props;
   const data = searchMovies.map((film) => ({
     id: film.id,
@@ -47,12 +50,19 @@ const SearchMovieList = (props) => {
   const spinner = loadMovieList || error || searchEmpty ? null : <Spinner />;
   const errorMessage = error ? <ErrorIndicator /> : null;
   return (
-    <div className='movie-list'>
-      {searchEmpty}
-      {errorMessage}
-      {spinner}
-      {content}
-    </div>
+  // <GenresConsumer>
+  //   {
+  //     ({ genres }) => (
+            <div className='movie-list'>
+              {searchEmpty}
+              {errorMessage}
+              {spinner}
+              {content}
+            </div>
+  //   )
+  // }
+  // </GenresConsumer>
+
   );
 };
 

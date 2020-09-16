@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ApiService from '../../services/api-service';
+import { GenresProvider } from '../context';
 import Main from '../main';
 import { debounce } from '../../../node_modules/lodash';
 import 'antd/dist/antd.css';
@@ -110,13 +111,11 @@ export default class App extends Component {
       .getRatedList(guestId)
       .then((list) => {
         // console.log(list);
-        if (list.total_results !== 0) {
-          this.setState({
-            ratedMovies: [...list.results],
-            totalRatedResults: list.total_results,
-            loadRatedList: true,
-          });
-        }
+        this.setState({
+          ratedMovies: [...list.results],
+          totalRatedResults: list.total_results,
+          loadRatedList: true,
+        });
       })
       // .then(console.log(this.state.ratedMovies))
       .catch(this.onError);
@@ -125,9 +124,6 @@ export default class App extends Component {
   rateMovie = (movieId, guestId, requestBody) => {
     this.apiService
       .requestRateMovie(movieId, guestId, requestBody)
-      .then((list) => {
-        // console.log(`ratedFilm ${list.success}`);
-      })
       .catch(this.onError);
   }
 
@@ -150,27 +146,29 @@ export default class App extends Component {
       loadGenres, loadMovieList, loadRatedList, totalSearchResults, totalRatedResults, error,
     } = this.state;
     return (
-      <div className="container">
-        <Main
-          changeSearch = {this.changeSearch}
-          rateMovie = {this.rateMovie}
-          ratedList = {this.ratedList}
-          nextPage = {this.nextPage}
-          changeTab = {this.changeTab}
-          guestSessionId={guestSessionId}
-          searchTerm={searchTerm}
-          error={error}
-          searchMovies={searchMovies}
-          ratedMovies={ratedMovies}
-          genres={genres}
-          loadGenres={loadGenres}
-          loadMovieList={loadMovieList}
-          loadRatedList={loadRatedList}
-          totalRatedResults={totalRatedResults}
-          totalSearchResults = {totalSearchResults}
-          currentTab={currentTab}
-        />
-      </div>
+      <GenresProvider value={this.apiService} >
+        <div className="container">
+          <Main
+            changeSearch = {this.changeSearch}
+            rateMovie = {this.rateMovie}
+            ratedList = {this.ratedList}
+            nextPage = {this.nextPage}
+            changeTab = {this.changeTab}
+            guestSessionId={guestSessionId}
+            searchTerm={searchTerm}
+            error={error}
+            searchMovies={searchMovies}
+            ratedMovies={ratedMovies}
+            genres={genres}
+            loadGenres={loadGenres}
+            loadMovieList={loadMovieList}
+            loadRatedList={loadRatedList}
+            totalRatedResults={totalRatedResults}
+            totalSearchResults = {totalSearchResults}
+            currentTab={currentTab}
+          />
+        </div>
+      </GenresProvider>
     );
   }
 }
