@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/kino-project/static/css/main.50c72020.chunk.css",
+    "main.js": "/kino-project/static/js/main.cb4e47d6.chunk.js",
+    "main.js.map": "/kino-project/static/js/main.cb4e47d6.chunk.js.map",
+    "runtime-main.js": "/kino-project/static/js/runtime-main.cddc602b.js",
+    "runtime-main.js.map": "/kino-project/static/js/runtime-main.cddc602b.js.map",
+    "static/css/2.04ff9426.chunk.css": "/kino-project/static/css/2.04ff9426.chunk.css",
+    "static/js/2.91ece13f.chunk.js": "/kino-project/static/js/2.91ece13f.chunk.js",
+    "static/js/2.91ece13f.chunk.js.map": "/kino-project/static/js/2.91ece13f.chunk.js.map",
+    "index.html": "/kino-project/index.html",
+    "precache-manifest.854f271f512adba0bddfe4bb14aae46d.js": "/kino-project/precache-manifest.854f271f512adba0bddfe4bb14aae46d.js",
+    "service-worker.js": "/kino-project/service-worker.js",
+    "static/css/2.04ff9426.chunk.css.map": "/kino-project/static/css/2.04ff9426.chunk.css.map",
+    "static/css/main.50c72020.chunk.css.map": "/kino-project/static/css/main.50c72020.chunk.css.map",
+    "static/js/2.91ece13f.chunk.js.LICENSE.txt": "/kino-project/static/js/2.91ece13f.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.cddc602b.js",
+    "static/css/2.04ff9426.chunk.css",
+    "static/js/2.91ece13f.chunk.js",
+    "static/css/main.50c72020.chunk.css",
+    "static/js/main.cb4e47d6.chunk.js"
+  ]
+}
