@@ -1,0 +1,10 @@
+.ant-pagination .ant-pagination-options {
+  display: none;
+}
+
+.ant-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}

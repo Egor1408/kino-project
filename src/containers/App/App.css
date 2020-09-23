@@ -5,9 +5,10 @@
 body {
   background: #f7f7f7;
 }
-.container {
+.wrapper {
+  width: 100%;
   max-width: 1010px;
-  height: 100vh;
+  height: 100%;
   margin: 0 auto;
   padding: 13px 36px 17px;
   background: #fff;
@@ -16,6 +17,6 @@ body {
   justify-content: center;
 }
 
-.container .ant-spin {
+.wrapper .ant-spin {
   margin-top: 50px;
 }

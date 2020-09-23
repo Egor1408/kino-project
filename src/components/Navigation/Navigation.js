@@ -1,16 +1,16 @@
 import React from 'react';
 import { Pagination } from 'antd';
-import './pagination.css';
+import './Navigation.css';
 
 const Navigation = (props) => {
   const {
-    totalSearchResults, totalRatedResults, nextPage, loadMovieList, currentTab,
+    totalMovieResults, nextPage, loadMovieList,
   } = props;
 
-  if (loadMovieList && totalSearchResults > 20 && currentTab === '1') {
+  if (loadMovieList && totalMovieResults > 20) {
     return (
       <Pagination
-        total={totalSearchResults}
+        total={totalMovieResults}
         pageSize='20'
         onChange={(page) => { nextPage(page); }}
       />

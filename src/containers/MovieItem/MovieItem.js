@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Typography, Card, Rate } from 'antd';
 import { format } from 'date-fns';
 import { FrownTwoTone } from '@ant-design/icons';
-import './movie-item.css';
+import './MovieItem.css';
 
 const { Text, Title } = Typography;
 
@@ -10,7 +10,7 @@ class MovieItem extends Component {
   render() {
     const {
       poster, title, date, genresList, genreIds, overview,
-      rateMovie, id, guestSessionId, voteAverage,
+      rateMovie, filmId, guestId, voteAverage, rating,
     } = this.props;
 
     const genres = genreIds.map((genresFilm) => {
@@ -38,13 +38,9 @@ class MovieItem extends Component {
       styleColor = '#e90000';
     }
     const releaseDate = date ? format(new Date(date), 'MMMM d, yyyy') : null;
-
     return (
 
-      <Card style={{
-        width: 451,
-        height: 279,
-      }}>
+      <Card>
         <div className='poster'>
           {image}
         </div>
@@ -65,11 +61,11 @@ class MovieItem extends Component {
             <Text strong>{overview}</Text>
           </div>
           <div className="rate">
-            <Rate allowHalf count='10' style={{ fontSize: 14 }} onChange={(num) => {
+            <Rate allowHalf count='10' defaultValue={rating} style={{ fontSize: 14 }} onChange={(num) => {
               const body = {
                 value: num,
               };
-              rateMovie(id, guestSessionId, body);
+              rateMovie(filmId, guestId, body);
             }}/>
           </div>
         </div>
