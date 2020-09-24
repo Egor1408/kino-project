@@ -103,6 +103,7 @@ class App extends Component {
               searchTerm={this.state.searchTerm}
               changeTab={this.changeTab}
               activeTab={this.state.activeTab}
+              inputRef={this.inputRef}
             />
           </div>
         </ErrorBoundary>

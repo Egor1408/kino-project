@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Tabs, Input } from 'antd';
 import SearchMovieList from '../../containers/SearchMovieList/SearchMovieList';
 import RatedMovieList from '../../containers/RatedMovieList/RatedMovieList';
@@ -7,15 +7,22 @@ import './TabPanel.css';
 const { TabPane } = Tabs;
 const { Search } = Input;
 
-const TabPanel = (props) => {
-  const {
-    activeTab, rateMovie, guestId, onRateClick, genres, loadGenres, searchTerm, changeSearch,
-  } = props;
-  return (
+class TabPanel extends Component {
+  componentDidMount() {
+    this.inputRef.focus();
+  }
+
+  render() {
+    const {
+      activeTab, rateMovie, guestId, onRateClick, genres, loadGenres, searchTerm, changeSearch,
+    } = this.props;
+    return (
     <div className='TabPanel'>
-      <Tabs className="tabs" defaultActiveKey="1" onChange={(e) => { props.changeTab(e); }}>
+      <Tabs className="tabs" defaultActiveKey="1" onChange={(e) => { this.props.changeTab(e); }}>
         <TabPane tab="Search" key="1">
           <Search
+            // eslint-disable-next-line no-return-assign
+            ref={(inputRef) => this.inputRef = inputRef}
             className='search'
             placeholder='Search movie'
             onChange={(e) => (changeSearch(e.target.value))}
@@ -42,7 +49,8 @@ const TabPanel = (props) => {
         </TabPane>
       </Tabs>
     </div>
-  );
-};
+    );
+  }
+}
 
 export default TabPanel;
