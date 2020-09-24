@@ -20,3 +20,9 @@ body {
 .wrapper .ant-spin {
   margin-top: 50px;
 }
+
+@media screen and (max-width: 640px) {
+  .wrapper {
+    padding: 10px 16px 20px;
+  }
+}

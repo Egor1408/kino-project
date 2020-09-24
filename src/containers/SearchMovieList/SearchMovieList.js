@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
-import { List, Empty } from 'antd';
+import { List, Empty, Result } from 'antd';
 import MovieItem from '../MovieItem/MovieItem';
 import Navigation from '../../components/Navigation/Navigation';
 import ApiService from '../../services/api-service';
@@ -16,18 +16,28 @@ class SearchMovieList extends Component {
     currentPage: '1',
     totalMovieResults: 0,
     loadMovieList: false,
+    col: 2,
+    hasError: false,
   };
 
   apiService = new ApiService();
 
   componentDidMount() {
     // this.searchList(this.props.searchTerm, this.state.currentPage);
+    this.checkWidth();
+  }
+
+  componentDidCatch() {
+    this.setState({
+      hasError: true,
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.currentPage !== prevState.currentPage
       || (this.props.searchTerm !== prevProps.searchTerm && this.props.searchTerm !== '')
-      || this.props.onRateClick !== prevProps.onRateClick) {
+      || this.props.onRateClick !== prevProps.onRateClick
+      || (this.props.searchTerm && this.props.activeTab !== prevProps.activeTab)) {
       this.searchList(this.props.searchTerm, this.state.currentPage);
     }
   }
@@ -45,6 +55,20 @@ class SearchMovieList extends Component {
       .catch(this.onError);
   }
 
+  onError = () => {
+    this.setState({
+      hasError: true,
+    });
+  }
+
+  checkWidth = () => {
+    if (document.documentElement.clientWidth < 800) {
+      this.setState({
+        col: 1,
+      });
+    }
+  }
+
   nextPage = (newPage) => {
     this.setState({
       currentPage: newPage,
@@ -53,7 +77,7 @@ class SearchMovieList extends Component {
 
   render() {
     const {
-      searchMovies, loadMovieList,
+      searchMovies, currentPage, loadMovieList, col, hasError, totalMovieResults,
     } = this.state;
     const data = searchMovies.map((film) => ({
       id: film.id,
@@ -65,10 +89,16 @@ class SearchMovieList extends Component {
       genreIds: film.genre_ids,
       voteAverage: film.vote_average,
     }));
+    if (hasError) {
+      return <Result
+              status="warning"
+              title="There are some problems with your internet."
+            />;
+    }
     if (this.props.searchTerm
-      && loadMovieList
       && this.props.loadGenres
-      && this.state.totalMovieResults !== 0) {
+      && loadMovieList
+      && totalMovieResults !== 0) {
       return (
         <GenresConsumer>
           {
@@ -76,12 +106,13 @@ class SearchMovieList extends Component {
                 <React.Fragment>
                   <div className='movie-list'>
                     <List
-                      grid={{ gutter: 20, column: 2 }}
+                      grid={{ gutter: 20, column: col }}
                       dataSource={data}
                       renderItem={(item) => (
                         <List.Item>
                           <ErrorBoundary key= {item.id}>
                             <MovieItem
+                              hasError={this.state.hasError}
                               filmId={item.id}
                               poster={item.poster}
                               title={item.title}
@@ -100,9 +131,9 @@ class SearchMovieList extends Component {
                     />
                   </div>
                   <Navigation
-                    totalMovieResults={this.state.totalMovieResults}
-                    currentPage={this.state.currentPage}
-                    loadMovieList={this.state.loadMovieList}
+                    totalMovieResults={totalMovieResults}
+                    currentPage={currentPage}
+                    loadMovieList={loadMovieList}
                     nextPage={this.nextPage}
                   />
                 </React.Fragment>
@@ -117,7 +148,7 @@ class SearchMovieList extends Component {
     if (!this.state.totalMovieResults && loadMovieList) {
       return <Empty description='Поиск не дал результатов'/>;
     }
-    return (<Spinner />);
+    return <Spinner />;
   }
 }
 

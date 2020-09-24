@@ -9,11 +9,11 @@ const { Search } = Input;
 
 const TabPanel = (props) => {
   const {
-    rateMovie, guestId, onRateClick, genres, loadGenres, searchTerm, changeSearch,
+    activeTab, rateMovie, guestId, onRateClick, genres, loadGenres, searchTerm, changeSearch,
   } = props;
   return (
     <div className='TabPanel'>
-      <Tabs className="tabs" defaultActiveKey="1">
+      <Tabs className="tabs" defaultActiveKey="1" onChange={(e) => { props.changeTab(e); }}>
         <TabPane tab="Search" key="1">
           <Search
             className='search'
@@ -27,6 +27,7 @@ const TabPanel = (props) => {
             onRateClick={onRateClick}
             genres={genres}
             loadGenres={loadGenres}
+            activeTab={activeTab}
           />
         </TabPane>
         <TabPane tab="Rated" key="2" >
@@ -36,6 +37,7 @@ const TabPanel = (props) => {
             onRateClick={onRateClick}
             genres={genres}
             loadGenres={loadGenres}
+            activeTab={activeTab}
           />
         </TabPane>
       </Tabs>

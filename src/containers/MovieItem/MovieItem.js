@@ -20,7 +20,7 @@ class MovieItem extends Component {
     });
 
     let image = <div className='noImage'>
-                  <span>Изображение отсутствует</span>
+                  <span>No Image</span>
                   <FrownTwoTone/>
                 </div>;
 

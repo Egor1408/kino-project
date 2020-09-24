@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
-import { List, Empty } from 'antd';
+import { List, Empty, Result } from 'antd';
 import MovieItem from '../MovieItem/MovieItem';
 import Navigation from '../../components/Navigation/Navigation';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
@@ -15,6 +15,7 @@ class RatedMovieList extends Component {
     currentPage: '1',
     loadMovieList: false,
     totalMovieResults: 0,
+    hasError: false,
   };
 
   apiService = new ApiService();
@@ -23,8 +24,15 @@ class RatedMovieList extends Component {
     this.ratedList(this.props.guestId);
   }
 
+  componentDidCatch() {
+    this.setState({
+      hasError: true,
+    });
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.onRateClick !== prevProps.onRateClick) {
+    if (this.props.activeTab !== prevProps.activeTab
+      || this.props.onRateClick !== prevProps.onRateClick) {
       this.ratedList(this.props.guestId);
     }
   }
@@ -42,9 +50,15 @@ class RatedMovieList extends Component {
       .catch(this.onError);
   };
 
+  onError = () => {
+    this.setState({
+      hasError: true,
+    });
+  }
+
   render() {
     const {
-      ratedMovies, loadMovieList,
+      ratedMovies, loadMovieList, totalMovieResults, hasError, currentPage,
     } = this.state;
     const data = ratedMovies.map((film) => ({
       id: film.id,
@@ -57,7 +71,13 @@ class RatedMovieList extends Component {
       voteAverage: film.vote_average,
     }));
 
-    if (this.state.totalMovieResults === 0) {
+    if (hasError) {
+      return <Result
+              status="warning"
+              title="There are some problems with your internet."
+            />;
+    }
+    if (totalMovieResults === 0) {
       return <Empty description="Вы еще не оценили ни одного фильма"/>;
     }
     if (loadMovieList && this.props.loadGenres) {
@@ -89,9 +109,9 @@ class RatedMovieList extends Component {
             />
           </div>
           <Navigation
-            totalMovieResults={this.state.totalMovieResults}
-            currentPage={this.state.currentPage}
-            loadMovieList={this.state.loadMovieList}
+            totalMovieResults={totalMovieResults}
+            currentPage={currentPage}
+            loadMovieList={loadMovieList}
             nextPage={this.nextPage}
           />
         </React.Fragment>

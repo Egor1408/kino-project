@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Result } from 'antd';
 import TabPanel from '../../components/TabPanel/TabPanel';
 import ApiService from '../../services/api-service';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
@@ -13,8 +14,9 @@ class App extends Component {
     loadGenres: false,
     guestSessionId: null,
     onRateClick: 0,
+    activeTab: 1,
     searchTerm: '',
-    currentRating: null,
+    hasError: false,
   }
 
   apiService = new ApiService();
@@ -24,12 +26,24 @@ class App extends Component {
     this.genres();
   }
 
+  componentDidCatch() {
+    this.setState({
+      hasError: true,
+    });
+  }
+
   changeSearch = debounce((e) => {
     this.setState({
       searchTerm: e,
       currentPage: 1,
     });
   }, 1500);
+
+  changeTab = (tab) => {
+    this.setState({
+      activeTab: tab,
+    });
+  }
 
   guestSession = () => {
     this.apiService
@@ -54,6 +68,12 @@ class App extends Component {
       .catch(this.onError);
   }
 
+  onError = () => {
+    this.setState({
+      hasError: true,
+    });
+  }
+
   rateMovie = (movieId, guestId, requestBody) => {
     this.apiService
       .requestRateMovie(movieId, guestId, requestBody)
@@ -63,6 +83,12 @@ class App extends Component {
   }
 
   render() {
+    if (this.state.hasError) {
+      return <Result
+            status="warning"
+            title="There are some problems with your internet."
+            />;
+    }
     return (
       <GenresProvider value={this.state.genres}>
         <ErrorBoundary>
@@ -75,6 +101,8 @@ class App extends Component {
               loadGenres={this.state.loadGenres}
               changeSearch={this.changeSearch}
               searchTerm={this.state.searchTerm}
+              changeTab={this.changeTab}
+              activeTab={this.state.activeTab}
             />
           </div>
         </ErrorBoundary>
