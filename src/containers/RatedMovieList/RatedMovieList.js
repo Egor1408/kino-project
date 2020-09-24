@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
+import PropTypes, { number } from 'prop-types';
 import { List, Empty, Result } from 'antd';
 import MovieItem from '../MovieItem/MovieItem';
 import Navigation from '../../components/Navigation/Navigation';
@@ -10,17 +11,28 @@ import 'antd/dist/antd.css';
 import './RatedMovieList.css';
 
 class RatedMovieList extends Component {
+  static propTypes = {
+    ratedMovies: PropTypes.array,
+    loadMovieList: PropTypes.bool,
+    totalMovieResults: PropTypes.number,
+    hasError: PropTypes.bool,
+    currentPage: PropTypes.number,
+    col: PropTypes.number,
+  }
+
   state = {
     ratedMovies: [],
     currentPage: '1',
     loadMovieList: false,
     totalMovieResults: 0,
+    col: 2,
     hasError: false,
   };
 
   apiService = new ApiService();
 
   componentDidMount() {
+    this.checkWidth();
     this.ratedList(this.props.guestId);
   }
 
@@ -34,6 +46,14 @@ class RatedMovieList extends Component {
     if (this.props.activeTab !== prevProps.activeTab
       || this.props.onRateClick !== prevProps.onRateClick) {
       this.ratedList(this.props.guestId);
+    }
+  }
+
+  checkWidth = () => {
+    if (document.documentElement.clientWidth < 800) {
+      this.setState({
+        col: 1,
+      });
     }
   }
 
@@ -58,7 +78,7 @@ class RatedMovieList extends Component {
 
   render() {
     const {
-      ratedMovies, loadMovieList, totalMovieResults, hasError, currentPage,
+      ratedMovies, loadMovieList, totalMovieResults, hasError, currentPage, col,
     } = this.state;
     const data = ratedMovies.map((film) => ({
       id: film.id,
@@ -85,7 +105,7 @@ class RatedMovieList extends Component {
         <React.Fragment>
           <div className='MovieList'>
             <List
-            grid={{ gutter: 20, column: 2 }}
+            grid={{ gutter: 20, column: col }}
             dataSource={data}
             renderItem={(item) => (
               <List.Item>

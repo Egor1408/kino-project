@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Result } from 'antd';
 import TabPanel from '../../components/TabPanel/TabPanel';
 import ApiService from '../../services/api-service';
@@ -9,6 +10,17 @@ import 'antd/dist/antd.css';
 import './App.css';
 
 class App extends Component {
+  static propTypes = {
+    genres: PropTypes.array,
+    searchTerm: PropTypes.string,
+    guestSessionId: PropTypes.number,
+    onRateClick: PropTypes.number,
+    totalRatedResults: PropTypes.number,
+    activeTab: PropTypes.number,
+    loadGenres: PropTypes.bool,
+    hasError: PropTypes.bool,
+  }
+
   state = {
     genres: [],
     loadGenres: false,

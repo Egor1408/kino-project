@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Typography, Card, Rate } from 'antd';
 import { format } from 'date-fns';
 import { FrownTwoTone } from '@ant-design/icons';
@@ -7,6 +8,20 @@ import './MovieItem.css';
 const { Text, Title } = Typography;
 
 class MovieItem extends Component {
+  static propTypes = {
+    poster: PropTypes.string,
+    title: PropTypes.string,
+    date: PropTypes.string,
+    genresList: PropTypes.array,
+    genreIds: PropTypes.array,
+    overview: PropTypes.string,
+    rateMovie: PropTypes.func.isRequired,
+    filmId: PropTypes.number,
+    guestId: PropTypes.string,
+    voteAverage: PropTypes.number,
+    rating: PropTypes.number,
+  }
+
   render() {
     const {
       poster, title, date, genresList, genreIds, overview,

@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List, Empty, Result } from 'antd';
 import MovieItem from '../MovieItem/MovieItem';
 import Navigation from '../../components/Navigation/Navigation';
@@ -11,6 +12,15 @@ import './SearchMovieList.css';
 import 'antd/dist/antd.css';
 
 class SearchMovieList extends Component {
+  static propTypes = {
+    searchMovies: PropTypes.array,
+    loadMovieList: PropTypes.bool,
+    totalMovieResults: PropTypes.number,
+    hasError: PropTypes.bool,
+    currentPage: PropTypes.number,
+    col: PropTypes.number,
+  }
+
   state = {
     searchMovies: [],
     currentPage: '1',
