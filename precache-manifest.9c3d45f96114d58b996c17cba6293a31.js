@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "cece98d1799b7a0bf6df84ecaa3b34a5",
+    "revision": "2def0b45290b410e8e7cf71283923785",
     "url": "/kino-project/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/kino-project/static/css/2.04ff9426.chunk.css"
   },
   {
-    "revision": "8ace5915eb1c8819b1a7",
+    "revision": "a410c60bbfc09cc807f0",
     "url": "/kino-project/static/css/main.a84c0685.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/kino-project/static/js/2.e45c9fb8.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "8ace5915eb1c8819b1a7",
-    "url": "/kino-project/static/js/main.8d0aa154.chunk.js"
+    "revision": "a410c60bbfc09cc807f0",
+    "url": "/kino-project/static/js/main.f81b8eac.chunk.js"
   },
   {
     "revision": "3fc11f36992de9f44e33",
