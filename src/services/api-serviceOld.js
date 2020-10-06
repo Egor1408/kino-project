@@ -17,7 +17,7 @@ export default class ApiService {
   }
 
   async requestSearchList(searchTerm, pageNumber) {
-    const res = await fetch(`${this._apiBase}/search/movie?${this._apiKey}&query=${searchTerm}&page=${pageNumber}`);
+    const res = await fetch(`${this._apiBase}/search/movie?${this._apiKey}&language=ru&query=${searchTerm}&page=${pageNumber}&include_adult=false`);
     if (!res.ok) {
       throw new Error(`Could not fetch url, received ${res.status}`);
     }

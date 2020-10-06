@@ -7,33 +7,40 @@ import './MovieItem.css';
 
 const { Text, Title } = Typography;
 
-class MovieItem extends Component {
+export default class MovieItem extends Component {
+  static defaultProps = {
+    rating: 0,
+  }
+
+  static defaultProps = {
+    id: 0,
+    averageRating: 0,
+    poster: null,
+    title: null,
+    release: null,
+    genres: [],
+    description: 'Описание временно отсутствует',
+    rating: 0,
+  }
+
   static propTypes = {
+    id: PropTypes.number,
+    averageRating: PropTypes.number,
     poster: PropTypes.string,
     title: PropTypes.string,
-    date: PropTypes.string,
-    genresList: PropTypes.array,
-    genreIds: PropTypes.array,
-    overview: PropTypes.string,
-    rateMovie: PropTypes.func.isRequired,
-    filmId: PropTypes.number,
-    guestId: PropTypes.string,
-    voteAverage: PropTypes.number,
+    release: PropTypes.string,
+    description: PropTypes.string,
+    genres: PropTypes.array,
     rating: PropTypes.number,
   }
 
   render() {
     const {
-      poster, title, date, genresList, genreIds, overview,
-      rateMovie, filmId, guestId, voteAverage, rating,
+      poster, title, release, genres, description,
+      rateMovie, filmId, averageRating, rating,
     } = this.props;
 
-    const genres = genreIds.map((genresFilm) => {
-      const [currentGenre] = genresList.filter((item) => (
-        item.id === genresFilm));
-      return (<Text code key={currentGenre.id}>{currentGenre.name}</Text>);
-    });
-
+    const genresList = genres.map((item, i) => (<Text code key={i}> {item}</Text>));
     let image = <div className='noImage'>
                   <span>No Image</span>
                   <FrownTwoTone/>
@@ -43,16 +50,16 @@ class MovieItem extends Component {
       image = <img src={`http://image.tmdb.org/t/p/w185${poster}`} alt='poster'/>;
     }
     let styleColor = null;
-    if (voteAverage >= 7) {
+    if (averageRating >= 7) {
       styleColor = '#66e900';
-    } else if (voteAverage >= 5) {
+    } else if (averageRating >= 5) {
       styleColor = '#e9d100';
-    } else if (voteAverage >= 3) {
+    } else if (averageRating >= 3) {
       styleColor = '#e97e00';
     } else {
       styleColor = '#e90000';
     }
-    const releaseDate = date ? format(new Date(date), 'MMMM d, yyyy') : null;
+    const releaseDate = release ? format(new Date(release), 'MMMM d, yyyy') : null;
     return (
 
       <Card>
@@ -64,23 +71,20 @@ class MovieItem extends Component {
             <Title level={4}>{title}</Title>
           </div>
           <div className='vote-average' style={{ borderColor: styleColor }}>
-            <span>{voteAverage}</span>
+            <span>{averageRating}</span>
           </div>
           <div className='date'>
             <Text type="secondary">{releaseDate}</Text>
           </div>
           <div className="genres">
-            {genres}
+            {genresList}
           </div>
           <div className="overview">
-            <Text strong>{overview}</Text>
+            <Text strong>{description}</Text>
           </div>
           <div className="rate">
-            <Rate allowHalf count='10' defaultValue={rating} style={{ fontSize: 14 }} onChange={(num) => {
-              const body = {
-                value: num,
-              };
-              rateMovie(filmId, guestId, body);
+            <Rate allowHalf count='10' defaultValue={rating} style={{ fontSize: 14 }} onChange={(value) => {
+              rateMovie(value, filmId);
             }}/>
           </div>
         </div>
@@ -88,5 +92,3 @@ class MovieItem extends Component {
     );
   }
 }
-
-export default MovieItem;

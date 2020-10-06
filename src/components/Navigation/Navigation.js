@@ -4,15 +4,15 @@ import './Navigation.css';
 
 const Navigation = (props) => {
   const {
-    totalMovieResults, nextPage, loadMovieList,
+    totalMovieResults, nextPage, loadMovieList, activeTab, currentPage,
   } = props;
-
   if (loadMovieList && totalMovieResults > 20) {
     return (
       <Pagination
+        current={currentPage}
         total={totalMovieResults}
         pageSize='20'
-        onChange={(page) => { nextPage(page); }}
+        onChange={(page) => { nextPage(activeTab, page); }}
       />
     );
   }
